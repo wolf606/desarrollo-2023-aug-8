@@ -16,6 +16,9 @@ const {
 } = require("./config");
 
 const DB_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_SERVER_IP}/?retryWrites=true&w=majority`;
+/*Local DB URI
+const DB_URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_SERVER_IP}:${DB_PORT}/${DB_NAME}?retryWrites=true&w=majority`;
+*/
 
 async function connectToDatabase() {
     console.debug("Mongo Cluster: ", DB_URI);
