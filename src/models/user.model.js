@@ -5,8 +5,9 @@ const UserSchema = mongoose.Schema({
     lastname: { type: String },
     email: { type: String },
     password: { type: String },
+    active: { type: Boolean },
     address: {
-        type: Schema.Types.ObjectId, ref: "Address"
+        type: mongoose.Schema.Types.ObjectId, ref: "Address"
     }
 });
 
