@@ -6,7 +6,7 @@ async function signIn(req, res) {
     const email = req.body.email.toLowerCase();
     const password = req.body.password;
     
-    User.findOne({ email: email }, 'password role active')
+    User.findOne({ email: email }, 'password active')
     .then(async (user) => {
         if (user !== null) {
             comparePassword(password, user.password)
