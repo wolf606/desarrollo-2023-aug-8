@@ -36,6 +36,7 @@ const validateUserSignIn = [
     check("password", "password field is required").exists(),
     check("password", "password field must be a string").isString(),
     check("password", "password field cannot be empty").not().isEmpty(),
+    check("password", "password field needs 6 or more characters").isLength({ min: 6 }),
 
     (req, res, next) => {
         const errors = validationResult(req);

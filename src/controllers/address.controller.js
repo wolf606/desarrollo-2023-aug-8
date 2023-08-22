@@ -1,9 +1,10 @@
 const Address = require("../models/address.model");
+const { addressResource } = require("../resources/address.resource");
 
 async function index(req, res) {
     Address.find()
     .then((addresses) => {
-        res.status(200).send(addresses);
+        res.status(200).send(addressResource(addresses));
     })
     .catch((err) => {
         res.status(422).send({ error: "Cannot find addresses. Reason: "});
@@ -18,7 +19,7 @@ async function show(req, res) {
         if (adress === null) {
             res.status(404).send({ error: "adress not found." });
         } else {
-            res.status(200).send(adress);
+            res.status(200).send(addressResource(adress));
         }
     })
     .catch((err) => {
@@ -36,7 +37,7 @@ async function store(req, res) {
         address
     }).save()
     .then((address) => {
-        res.status(201).send(address);
+        res.status(201).send(addressResource(address));
     }
     )
     .catch((err) => {
@@ -59,7 +60,7 @@ async function update(req, res) {
         if (address === null) {
             res.status(404).send({ error: "Address not found." });
         } else {
-            res.status(200).send(address);
+            res.status(200).send(addressResource(address));
         }
     })
     .catch((err) => {
@@ -75,7 +76,7 @@ async function destroy(req, res) {
         if (address === null) {
             res.status(404).send({ error: "Address not found." });
         } else {
-            res.status(200).send(address);
+            res.status(200).send(addressResource(address));
         }
     })
     .catch((err) => {
@@ -99,7 +100,7 @@ async function wipe(req, res) {
             if (address === null) {
                 res.status(404).send({ error: "Address not found." });
             } else {
-                res.status(200).send(address);
+                res.status(200).send(addressResource(address));
             }
         })
         .catch((err) => {

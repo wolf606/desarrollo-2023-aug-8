@@ -9,7 +9,7 @@ const createAccessToken = (user) => {
     return new Promise((resolve, reject) => {
         jwt.sign(payload, SECRET_KEY, { algorithm: "HS256", expiresIn: "10h" }, (err, token) => {
             if (err) {
-                new Error(err);
+                reject(err);
             } else {
                 resolve(token);
             }

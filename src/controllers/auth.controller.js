@@ -8,24 +8,28 @@ async function signIn(req, res) {
     
     User.findOne({ email: email }, 'password role active')
     .then(async (user) => {
-        console.debug(user);
-        comparePassword(password, user.password)
-        .then(async (match) => {
-            if (match) {
-                if (user.active) {
-                    const token = await createAccessToken(user);
-                    res.status(200).send({ accessToken: token });
+        if (user !== null) {
+            comparePassword(password, user.password)
+            .then(async (match) => {
+                if (match) {
+                    if (user.active) {
+                        const token = await createAccessToken(user);
+                        res.status(200).send({ accessToken: token });
+                    } else {
+                        res.status(401).send({ error: {active: false} });
+                    }
                 } else {
-                    res.status(401).send({ error: {active: false} });
+                    res.status(401).send({ error: "Password does not match." });
                 }
-            } else {
-                res.status(401).send({ error: "Password does not match." });
-            }
-        })
-        .catch((err) => {
-            res.status(500).send({ error: "Cannot compare passwords." });
-            console.debug(err);
-        });
+            })
+            .catch((err) => {
+                res.status(500).send({ error: "Cannot compare passwords." });
+                console.debug(err);
+            });
+        } else {
+            res.status(404).send({ error: "User with that email does not exist." });
+            console.debug("findOne User should never return null. Validation failed.");
+        }
     })
     .catch((err) => {
         res.status(500).send({ error: "DB error." });

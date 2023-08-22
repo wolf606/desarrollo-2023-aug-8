@@ -1,10 +1,11 @@
 const User = require("../models/user.model");
 const { hashPassword } = require("../utils/pwd");
+const { userResource } = require("../resources/user.resource");
 
 async function index(req, res) {
     User.find()
     .then((users) => {
-        res.status(200).send(users);
+        res.status(200).send(userResource(users));
     })
     .catch((err) => {
         res.status(422).send({ error: "Cannot find users. Reason: "});
@@ -19,7 +20,7 @@ async function show(req, res) {
         if (user === null) {
             res.status(404).send({ error: "User not found." });
         } else {
-            res.status(200).send(user);
+            res.status(200).send(userResource(user));
         }
     })
     .catch((err) => {
@@ -30,10 +31,8 @@ async function show(req, res) {
 
 async function store(req, res) {
     const { name, lastname, email, password } = req.body;
-    console.debug("Password in plain text: ", password);
     hashPassword(password)
     .then((hash) => {
-        console.debug("Hashed password: ", hash);
         new User({
             name,
             lastname,
@@ -43,8 +42,7 @@ async function store(req, res) {
         })
         .save()
         .then((user) => {
-            console.debug("User created: ", user);
-            res.status(201).send(user);
+            res.status(201).send(userResource(user));
         }
         )
         .catch((err) => {
@@ -66,7 +64,7 @@ async function update(req, res) {
     if (req.body.lastname !== undefined) dict.lastname = req.body.lastname;
     if (req.body.email !== undefined) dict.email = req.body.email;
     if (req.body.password !== undefined) {
-        hashPassword(req.body.password)
+        await hashPassword(req.body.password)
         .then((hash) => {
             dict.password = hash;
         })
@@ -77,13 +75,14 @@ async function update(req, res) {
         });
     }
     if (req.body.active !== undefined) dict.active = req.body.active;
-    
+    if (req.body.addressId !== undefined) dict.address = req.body.addressId;
+
     User.findByIdAndUpdate({ _id: params.id }, dict, { new: true })
     .then((user) => {
         if (user === null) {
             res.status(404).send({ error: "User not found." });
         } else {
-            res.status(200).send(user);
+            res.status(200).send(userResource(user));
         }
     })
     .catch((err) => {
@@ -99,7 +98,7 @@ async function destroy(req, res) {
         if (user === null) {
             res.status(404).send({ error: "User not found." });
         } else {
-            res.status(200).send(user);
+            res.status(200).send(userResource(user));
         }
     })
     .catch((err) => {
@@ -122,7 +121,7 @@ async function wipe(req, res) {
             if (user === null) {
                 res.status(404).send({ error: "User not found." });
             } else {
-                res.status(200).send(user);
+                res.status(200).send(userResource(user));
             }
         })
         .catch((err) => {

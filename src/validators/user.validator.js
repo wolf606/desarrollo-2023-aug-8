@@ -1,5 +1,6 @@
 const { check, validationResult } = require("express-validator");
 const User = require("../models/user.model");
+const Address = require("../models/address.model");
 
 const validateUserStore = [
     check("name", "name field is required").exists(),
@@ -43,6 +44,7 @@ const validateUserStore = [
     check("password", "password field is required").exists(),
     check("password", "password field must be a string").isString(),
     check("password", "password field cannot be empty").not().isEmpty(),
+    check("password", "password field needs 6 or more characters").isLength({ min: 6 }),
 
     (req, res, next) => {
         const errors = validationResult(req);
@@ -95,8 +97,26 @@ const validateUserUpdate = [
 
     check("password", "password field must be a string").isString().optional(),
     check("password", "password field cannot be empty").not().isEmpty().optional(),
+    check("password", "password field needs 6 or more characters").isLength({ min: 6 }).optional(),
 
     check("active", "active field must be a boolean").isBoolean().optional(),
+
+    check("addressId", "addressId field must be a valid ObjectId").isMongoId().optional(),
+    check("addressId").custom(
+        async (value, { req, loc, path }) => {
+            try {
+                const addr = await Address.exists({ _id: req.body.addressId })
+                if (addr === null) {
+                    return Promise.reject("Address is not registered");
+                }
+            } catch (error) {
+                // Handle the error
+                console.error("An error occurred:", error);
+                // You can choose to return a rejection or handle the error differently
+                return Promise.reject("DB error");
+            }
+        }
+    ).optional(),
 
     (req, res, next) => {
         const errors = validationResult(req);
