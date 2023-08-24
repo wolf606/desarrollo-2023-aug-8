@@ -4,8 +4,8 @@ const CustomerSchema = mongoose.Schema({
     name: { type: String },
     email: { type: String },
     active: { type: Boolean },
-    photos: {
-        type: Array
+    avatar: {
+        type: String
     }
 }, {timestamps: true});
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const fs = require('fs');
 const app = require("./app")
 
 const { 
@@ -19,6 +20,23 @@ const DB_URI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_SERVER_IP}/?retryWr
 /*Local DB URI
 const DB_URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_SERVER_IP}:${DB_PORT}/${DB_NAME}?retryWrites=true&w=majority`;
 */
+const folderName = './uploads';
+
+async function createUploadsDir() {
+    try {
+        if (!fs.existsSync(folderName)) {
+            fs.mkdirSync(folderName);
+        }
+        if (!fs.existsSync(folderName+"/avatar")) {
+            fs.mkdirSync(folderName+"/avatar");
+        }
+        if (!fs.existsSync(folderName+"/service")) {
+            fs.mkdirSync(folderName+"/service");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+}
 
 async function connectToDatabase() {
     console.debug("Mongo Cluster: ", DB_URI);
@@ -41,3 +59,4 @@ async function connectToDatabase() {
 };
 
 connectToDatabase().catch(console.error);
+createUploadsDir();

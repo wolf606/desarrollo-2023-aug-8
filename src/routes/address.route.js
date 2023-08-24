@@ -9,11 +9,11 @@ const {
     wipe
 } = require("../controllers/address.controller");
 
-api.post("/addresses", store);
-api.get("/addresses", index);
-api.get("/addresses/:id", show);
-api.put("/addresses/:id", update);
-api.delete("/addresses/:id", destroy);
-api.delete("/addresses", wipe);
+api.post("/", store);
+api.get("/", index);
+api.get("/:id", show);
+api.put("/:id", update);
+api.delete("/:id", destroy);
+api.delete("/", wipe);
 
 module.exports = api;

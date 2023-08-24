@@ -16,11 +16,11 @@ const {
 } = require("../validators/user.validator");
 const { ensureAuth } = require("../middleware/user.auth");
 
-api.post("/users", validateUserStore,store);
-api.get("/users", index);
-api.get("/users/:id", validateUserShow, show);
-api.put("/users/:id", ensureAuth, validateUserUpdate, update);
-api.delete("/users/:id", ensureAuth, validateUserDestroy, destroy);
-api.delete("/users", ensureAuth, wipe);
+api.post("/", validateUserStore,store);
+api.get("/", index);
+api.get("/:id", validateUserShow, show);
+api.put("/:id", ensureAuth, validateUserUpdate, update);
+api.delete("/:id", ensureAuth, validateUserDestroy, destroy);
+api.delete("/", ensureAuth, wipe);
 
 module.exports = api;
