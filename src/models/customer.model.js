@@ -5,7 +5,7 @@ const CustomerSchema = mongoose.Schema({
     email: { type: String },
     active: { type: Boolean },
     avatar: {
-        type: String
+        type: Object
     }
 }, {timestamps: true});
 

@@ -1,4 +1,5 @@
 const Customer = require("../models/customer.model");
+const { getFullPath } = require("../utils/files");
 
 async function uploadFiles(req, res) {
     console.log("body: ",req.body);
@@ -38,9 +39,14 @@ async function store(req, res) {
     dict.name = req.body.name;
     dict.email = req.body.email;
     dict.active = true;
-    if (req.file !== undefined) {
-        dict.avatar = req.file.filename;
-    } 
+    if (req.file) {
+        const filePic = req.file;
+        const avatar = {
+            url: getFullPath(filePic.path),
+            mimetype: filePic.mimetype
+        };
+        dict.avatar = avatar;
+    }
     new Customer(dict)
     .save()
     .then((cust) => {

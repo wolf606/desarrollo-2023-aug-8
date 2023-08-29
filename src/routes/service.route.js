@@ -1,6 +1,8 @@
 const express = require("express");
 const api = express.Router();
-const { arrayHandler } = require("../utils/multer");
+const multer = require("multer");
+const storageLoc = 'uploads/service/';
+const upload = multer({ dest: storageLoc });
 
 const {
     uploadFiles,
@@ -9,11 +11,7 @@ const {
     store
 } = require("../controllers/service.controller");
 
-api.post(`/`, 
-(req, res, next) => {
-    singleHandler(req, res, next, 'uploads/service/', 'gallery')
-}
-, store);
+api.post(`/`, upload.array('gallery'), store);
 api.get('/', index);
 api.get('/:id', show);
 

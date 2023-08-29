@@ -1,10 +1,5 @@
 const Service = require("../models/service.model");
-
-async function uploadFiles(req, res) {
-    console.log("body: ",req.body);
-    console.log("gallery: ", req.files);
-    res.json({message: "service"});
-}
+const { getFullPath } = require("../utils/files");
 
 async function index(req, res) {
     Service.find()
@@ -38,11 +33,18 @@ async function store(req, res) {
     dict.name = req.body.name;
     dict.description = req.body.description;
     dict.active = true;
-    const arrayOfObjects = req.files;
-    if (req.files !== undefined) {
-        const filenamesArray = arrayOfObjects.map(obj => obj.filename);
-        dict.photos = filenamesArray;
-    } 
+    if (req.files && Array.isArray(req.files)) {
+        const pics = req.files.map(
+            (img) => {
+                const picPath = img.path;
+                return {
+                    url: getFullPath(picPath),
+                    mimetype: img.mimetype
+                };
+            }
+        );
+        dict.photos = pics;
+    }
     dict.category = req.body.category;
     new Service(dict)
     .save()
@@ -57,8 +59,43 @@ async function store(req, res) {
     );
 };
 
+/*
+async function update(req, res) {
+    const params = req.params;
+    var dict = {};
+    if (req.body.name !== undefined) dict.name = req.body.name;
+    if (req.body.description !== undefined) dict.description = req.body.description;
+    if (req.files && Array.isArray(req.files)) {
+        const pics = req.files.map(
+            (img) => {
+                const picPath = img.path;
+                return {
+                    url: getFullPath(picPath),
+                    mimetype: img.mimetype
+                };
+            }
+        );
+        dict.photos = pics;
+    }
+    if (req.body.active !== undefined) dict.active = req.body.active;
+    if (req.body.category !== undefined) dict.category = req.body.category;
+
+    User.findByIdAndUpdate({ _id: params.id }, dict, { new: true })
+    .then((user) => {
+        if (user === null) {
+            res.status(404).send({ error: "User not found." });
+        } else {
+            res.status(200).send(userResource(user));
+        }
+    })
+    .catch((err) => {
+        res.status(422).send({ error: "Cannot update User. Reason: "});
+        console.debug(err);
+    });
+}
+*/
+
 module.exports = {
-    uploadFiles,
     index,
     show,
     store
