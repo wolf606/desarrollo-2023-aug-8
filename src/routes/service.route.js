@@ -5,14 +5,15 @@ const storageLoc = 'uploads/service/';
 const upload = multer({ dest: storageLoc });
 
 const {
-    uploadFiles,
     show,
     index,
-    store
+    store,
+    update
 } = require("../controllers/service.controller");
 
 api.post(`/`, upload.array('gallery'), store);
 api.get('/', index);
 api.get('/:id', show);
+api.put('/:id', upload.array('gallery'), update);
 
 module.exports = api;

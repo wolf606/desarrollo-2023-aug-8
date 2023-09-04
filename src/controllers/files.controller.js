@@ -1,8 +1,8 @@
 const { getFileData } = require("../utils/files");
 
 async function show(req, res) {
-    const { folder1, folder2, filename } = req.params;
-    const file = getFileData(filename, `${folder1}/${folder2}`);
+    const { folder, filename } = req.params;
+    const file = getFileData(filename, `uploads/${folder}`);
     if (file !== null) {
         res.setHeader('Content-Disposition', 'attachment: filename="' + filename + '"');
         file.pipe(res);
@@ -11,7 +11,7 @@ async function show(req, res) {
             {
                 error: {
                     message: "File not found",
-                    url: `${folder1}/${folder2}`
+                    url: `/uploads/${folder}/${filename}`
                 }
             }
         );

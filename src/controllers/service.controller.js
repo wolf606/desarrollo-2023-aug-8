@@ -59,10 +59,10 @@ async function store(req, res) {
     );
 };
 
-/*
 async function update(req, res) {
     const params = req.params;
     var dict = {};
+    var newPics = {};
     if (req.body.name !== undefined) dict.name = req.body.name;
     if (req.body.description !== undefined) dict.description = req.body.description;
     if (req.files && Array.isArray(req.files)) {
@@ -75,17 +75,18 @@ async function update(req, res) {
                 };
             }
         );
-        dict.photos = pics;
+        newPics.pics = pics;
     }
+    console.debug("picsA: ", newPics.pics);
     if (req.body.active !== undefined) dict.active = req.body.active;
     if (req.body.category !== undefined) dict.category = req.body.category;
 
-    User.findByIdAndUpdate({ _id: params.id }, dict, { new: true })
-    .then((user) => {
-        if (user === null) {
+    Service.findByIdAndUpdate({ _id: params.id }, {dict, $push: { $each: newPics.pics }}, { new: true })
+    .then((ser) => {
+        if (ser === null) {
             res.status(404).send({ error: "User not found." });
         } else {
-            res.status(200).send(userResource(user));
+            res.status(200).send(ser);
         }
     })
     .catch((err) => {
@@ -93,10 +94,10 @@ async function update(req, res) {
         console.debug(err);
     });
 }
-*/
 
 module.exports = {
     index,
     show,
-    store
+    store,
+    update
 }
