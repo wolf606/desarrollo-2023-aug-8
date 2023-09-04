@@ -3,6 +3,7 @@ const api = express.Router();
 const multer = require("multer");
 const storageLoc = 'uploads/avatar/';
 const upload = multer({ dest: storageLoc });
+const { ensureAuth } = require("../middleware/user.auth");
 
 const {
     store,
@@ -13,11 +14,11 @@ const {
     wipe
 } = require("../controllers/customer.controller");
 
-api.post(`/`, upload.single('avatar'), store);
+api.post(`/`, upload.single('avatar'), ensureAuth, store);
 api.get('/', index);
 api.get('/:id', show);
-api.put('/:id', upload.single('avatar'), update);
-api.delete('/:id', destroy);
-api.delete('/', wipe);
+api.put('/:id', upload.single('avatar'), ensureAuth, update);
+api.delete('/:id', ensureAuth, destroy);
+api.delete('/', ensureAuth, wipe);
 
 module.exports = api;
