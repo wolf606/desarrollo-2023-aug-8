@@ -45,7 +45,7 @@ async function connectToDatabase() {
     .then(
         () => {
             console.log("Connected to MongoDB database");
-            app.listen(HOST_PORT, "0.0.0.0", () => {
+            app.listen(HOST_PORT, "127.0.0.1", () => {
                 console.log("Server running on: ");
                 console.log(`   https://${HOST_IP}:${HOST_PORT}/api/${API_VERSION}/`)
             });
