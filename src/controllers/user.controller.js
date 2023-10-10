@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const { hashPassword } = require("../utils/pwd");
 const { userResource } = require("../resources/user.resource");
+const { decodeToken } = require("../utils/jwt");
 
 async function index(req, res) {
     User.find()
@@ -133,11 +134,37 @@ async function wipe(req, res) {
     }
 }
 
+async function getMe(req, res) {
+    if (!req.headers.authorization) { 
+        res.status(401).send({ error: "Unauthenticated" });
+      } else {
+        const token = req.headers.authorization.replace(/['"]+/g, "");
+        decodeToken(token)
+        .then((payload) => {
+          User.findOne({ _id: payload.id })
+          .then((user) => {
+            if (user !== null) {
+                res.status(200).send(userResource(user));
+            } else {
+              res.status(404).send({ error: "User not found when getMe()." });
+            }
+          })
+          .catch((err) => {
+            res.status(401).send({ error: "Error finding existing user in getMe()." });
+          });
+        })
+        .catch((err) => {
+          res.status(401).send({ error: "Expired or Invalid token" });
+        })
+      }
+}
+
 module.exports = {
     store,
     index,
     show,
     update,
     destroy,
-    wipe
+    wipe,
+    getMe
 }

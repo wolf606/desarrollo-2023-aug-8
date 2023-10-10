@@ -6,7 +6,8 @@ const {
     show,
     update,
     destroy,
-    wipe
+    wipe,
+    getMe
 } = require("../controllers/user.controller");
 const {
     validateUserStore,
@@ -18,6 +19,7 @@ const { ensureAuth } = require("../middleware/user.auth");
 
 api.post("/", validateUserStore,store);
 api.get("/", index);
+api.get("/me", ensureAuth, getMe);
 api.get("/:id", validateUserShow, show);
 api.put("/:id", ensureAuth, validateUserUpdate, update);
 api.delete("/:id", ensureAuth, validateUserDestroy, destroy);
