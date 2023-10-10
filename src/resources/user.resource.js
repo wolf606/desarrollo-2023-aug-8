@@ -9,6 +9,7 @@ const userResource = (data) => {
             lastname: data.lastname,
             email: data.email,
             active: data.active,
+            role: data.role,
             address: data.address,
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,

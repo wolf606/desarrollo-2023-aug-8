@@ -31,7 +31,7 @@ async function show(req, res) {
 }
 
 async function store(req, res) {
-    const { name, lastname, email, password } = req.body;
+    const { name, lastname, email, password, role } = req.body;
     hashPassword(password)
     .then((hash) => {
         new User({
@@ -39,7 +39,8 @@ async function store(req, res) {
             lastname,
             email,
             password: hash,
-            active: true
+            active: true,
+            role
         })
         .save()
         .then((user) => {
