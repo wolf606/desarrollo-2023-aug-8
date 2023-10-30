@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const { hashPassword } = require("../utils/pwd");
 const { userResource } = require("../resources/user.resource");
 const { decodeToken } = require("../utils/jwt");
+const { getFullPath } = require("../utils/files");
 
 async function index(req, res) {
     User.find()
@@ -31,7 +32,14 @@ async function show(req, res) {
 }
 
 async function store(req, res) {
-    const { name, lastname, email, password, role } = req.body;
+    const { name, lastname, email, password } = req.body;
+    var avatar = {};
+    console.log("pic: ", req.file);
+    if (req.file) {
+        const filePic = req.file;
+        avatar.url = getFullPath(filePic.path);
+        avatar.mimetype = filePic.mimetype;
+    }
     hashPassword(password)
     .then((hash) => {
         new User({
@@ -40,7 +48,8 @@ async function store(req, res) {
             email,
             password: hash,
             active: true,
-            role
+            role: "student",
+            avatar
         })
         .save()
         .then((user) => {
@@ -77,7 +86,16 @@ async function update(req, res) {
         });
     }
     if (req.body.active !== undefined) dict.active = req.body.active;
+    if (req.body.role !== undefined) dict.role = req.body.role;
     if (req.body.addressId !== undefined) dict.address = req.body.addressId;
+    if (req.file) {
+        const filePic = req.file;
+        const avatar = {
+            url: getFullPath(filePic.path),
+            mimetype: filePic.mimetype
+        };
+        dict.avatar = avatar;
+    }
 
     User.findByIdAndUpdate({ _id: params.id }, dict, { new: true })
     .then((user) => {
@@ -117,6 +135,8 @@ async function wipe(req, res) {
     if (req.body.lastname !== undefined) dict.lastname = req.body.lastname;
     if (req.body.email !== undefined) dict.email = req.body.email;
     
+    console.log(req.body)
+
     if (dict !== null && Object.keys(dict).length > 0){
         User.deleteMany(dict)
         .then((user) => {

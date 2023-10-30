@@ -2,7 +2,7 @@ const { HOST_IP, HOST_PORT } = require("../../config");
 const fs = require('fs');
 
 function getFullPath(filePath) {
-    return `https://${HOST_IP}:${HOST_PORT}/${filePath}`;
+    return `http://${HOST_IP}:${HOST_PORT}/${filePath}`;
 };
 
 function getFileData(name, path) {

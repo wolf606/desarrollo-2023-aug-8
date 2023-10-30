@@ -17,6 +17,9 @@ const UserSchema = mongoose.Schema({
     role: { 
         type: String, 
         enum: Object.values(Roles) 
+    },
+    avatar: {
+        type: Object
     }
 }, {timestamps: true});
 

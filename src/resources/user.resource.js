@@ -11,6 +11,7 @@ const userResource = (data) => {
             active: data.active,
             role: data.role,
             address: data.address,
+            avatar: data.avatar,
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,
         };

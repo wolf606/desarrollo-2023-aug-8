@@ -17,11 +17,15 @@ const {
 } = require("../validators/user.validator");
 const { ensureAuth } = require("../middleware/user.auth");
 
-api.post("/", validateUserStore,store);
+const multer = require("multer");
+const storageLoc = 'uploads/avatar/';
+const upload = multer({ dest: storageLoc });
+
+api.post("/", upload.single('avatar'), store);
 api.get("/", index);
 api.get("/me", ensureAuth, getMe);
 api.get("/:id", validateUserShow, show);
-api.put("/:id", ensureAuth, validateUserUpdate, update);
+api.put("/:id", upload.single('avatar'), ensureAuth, validateUserUpdate, update);
 api.delete("/:id", ensureAuth, validateUserDestroy, destroy);
 api.delete("/", ensureAuth, wipe);
 
