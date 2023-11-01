@@ -128,7 +128,6 @@ async function destroy(req, res) {
 }
 
 async function wipe(req, res) {
-    const params = req.params;
     var dict = {};
     if (req.body.id !== undefined) dict._id = req.body.id;
     if (req.body.name !== undefined) dict.name = req.body.name;

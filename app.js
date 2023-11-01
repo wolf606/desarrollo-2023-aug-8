@@ -14,6 +14,9 @@ const authRoutes = require("./src/routes/auth.routes");
 const customerRoutes = require("./src/routes/customer.route");
 const serviceRoutes = require("./src/routes/service.route");
 const categoryRoutes = require("./src/routes/category.route");
+const stateRoutes = require("./src/routes/state.routes");
+const cityRoutes = require("./src/routes/city.routes");
+const countryRoutes = require("./src/routes/country.routes");
 
 const app = express();
 app.use(cors());
@@ -27,6 +30,9 @@ app.use(`/api/${API_VERSION}`, authRoutes);
 app.use(`/api/${API_VERSION}/services`, serviceRoutes);
 app.use(`/api/${API_VERSION}/customers`, customerRoutes);
 app.use(`/api/${API_VERSION}/categories`, categoryRoutes);
+app.use(`/api/${API_VERSION}/states`, stateRoutes);
+app.use(`/api/${API_VERSION}/cities`, cityRoutes);
+app.use(`/api/${API_VERSION}/countries`, countryRoutes);
 
 //Files routes
 app.use(`/uploads`, fileRoutes);

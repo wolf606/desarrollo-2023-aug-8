@@ -21,7 +21,7 @@ const multer = require("multer");
 const storageLoc = 'uploads/avatar/';
 const upload = multer({ dest: storageLoc });
 
-api.post("/", upload.single('avatar'), store);
+api.post("/", upload.single('avatar'), validateUserStore, store);
 api.get("/", index);
 api.get("/me", ensureAuth, getMe);
 api.get("/:id", validateUserShow, show);
