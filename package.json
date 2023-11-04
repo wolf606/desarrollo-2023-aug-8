@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/wolf606/desarrollo-2023-aug-8#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
