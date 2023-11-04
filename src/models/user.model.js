@@ -20,7 +20,11 @@ const UserSchema = mongoose.Schema({
     },
     avatar: {
         type: Object
-    }
+    },
+    emailVerificationToken: {
+        type: String,
+        required: false,
+    },
 }, {timestamps: true});
 
 module.exports = mongoose.model("User", UserSchema);
