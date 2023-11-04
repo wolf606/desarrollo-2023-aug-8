@@ -4,6 +4,8 @@ const { userResource } = require("../resources/user.resource");
 const { decodeToken } = require("../utils/jwt");
 const { getFullPath } = require("../utils/files");
 
+const { sendVerificationEmail } = require('../controllers/email.controller');
+
 async function index(req, res) {
     User.find()
     .then((users) => {
@@ -32,7 +34,7 @@ async function show(req, res) {
 }
 
 async function store(req, res) {
-    const { name, lastname, email, password } = req.body;
+    const { name, lastname, email, password, verificationToken } = req.body;
     var avatar = {};
     console.log("pic: ", req.file);
     if (req.file) {
@@ -49,10 +51,12 @@ async function store(req, res) {
             password: hash,
             active: true,
             role: "student",
-            avatar
+            avatar,
+            emailVerificationToken: verificationToken,
         })
         .save()
         .then((user) => {
+            sendVerificationEmail(user.email);
             res.status(201).send(userResource(user));
         }
         )
