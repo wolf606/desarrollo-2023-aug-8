@@ -55,11 +55,11 @@ async function store(req, res) {
             emailVerificationToken: verificationToken,
         })
         .save()
+        sendVerificationEmail(user.email)
         .then((user) => {
-            sendVerificationEmail(user.email);
+            console.log("email: ", sendVerificationEmail(user.email));
             res.status(201).send(userResource(user));
-        }
-        )
+        })
         .catch((err) => {
             res.status(500).send({ error: "Server cannot store user."});
             console.debug(err);
